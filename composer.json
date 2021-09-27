@@ -1,36 +1,40 @@
 {
-    "name": ":vendor_slug/:package_slug",
-    "description": ":package_description",
+    "name": "nkoporec/dump-php",
+    "description": "A php adapter for dump",
     "keywords": [
-        ":vendor_name",
-        ":package_slug"
+        "nkoporec",
+        "dump-php"
     ],
-    "homepage": "https://github.com/:vendor_slug/:package_slug",
+    "homepage": "https://github.com/nkoporec/dump-php",
     "license": "MIT",
     "authors": [
         {
-            "name": ":author_name",
-            "email": "author@domain.com",
+            "name": "nkoporec",
+            "email": "me@nkoporec.com",
             "role": "Developer"
         }
     ],
     "require": {
-        "php": "^8.0"
+        "php": "^7.3|^8.0",
+        "ext-curl": "*",
+        "ext-json": "*"
     },
     "require-dev": {
         "friendsofphp/php-cs-fixer": "^3.0",
         "phpunit/phpunit": "^9.5",
-        "spatie/ray": "^1.28",
         "vimeo/psalm": "^4.8"
     },
     "autoload": {
         "psr-4": {
-            "VendorName\\Skeleton\\": "src"
-        }
+            "Nkoporec\\Dump\\": "src"
+        },
+        "files": [
+            "src/helpers.php"
+        ]
     },
     "autoload-dev": {
         "psr-4": {
-            "VendorName\\Skeleton\\Tests\\": "tests"
+            "Nkoporec\\Dump\\Tests\\": "tests"
         }
     },
     "scripts": {
