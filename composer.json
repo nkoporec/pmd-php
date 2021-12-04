@@ -1,11 +1,11 @@
 {
-    "name": "nkoporec/dump-php",
-    "description": "A php adapter for dump",
+    "name": "nkoporec/pmd-php",
+    "description": "A php adapter for pmd",
     "keywords": [
         "nkoporec",
-        "dump-php"
+        "pmd-php"
     ],
-    "homepage": "https://github.com/nkoporec/dump-php",
+    "homepage": "https://github.com/nkoporec/pmd-php",
     "license": "MIT",
     "authors": [
         {
@@ -26,7 +26,7 @@
     },
     "autoload": {
         "psr-4": {
-            "Nkoporec\\Dump\\": "src"
+            "nkoporec\\Pmd\\": "src"
         },
         "files": [
             "src/helpers.php"
@@ -34,7 +34,7 @@
     },
     "autoload-dev": {
         "psr-4": {
-            "Nkoporec\\Dump\\Tests\\": "tests"
+            "nkoporec\\Pmd\\Tests\\": "tests"
         }
     },
     "scripts": {

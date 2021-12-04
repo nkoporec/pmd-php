@@ -1,12 +1,12 @@
 <?php
 
-use Nkoporec\Dump\Dump;
+use nkoporec\Pmd\Pmd;
 
-if (! function_exists('dump')) {
+if (! function_exists('pmd')) {
 
-    function dump(...$args) {
-        $dump = new Dump();
-        return $dump->send(...$args);
+    function pmd(...$args) {
+        $pmd = new Pmd();
+        return $pmd->send(...$args);
     }
 
 }
