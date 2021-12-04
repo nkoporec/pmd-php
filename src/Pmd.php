@@ -2,17 +2,19 @@
 
 namespace nkoporec\Pmd;
 
-class Pmd {
+class Pmd
+{
+    public const URL = "localhost";
+    public const PORT = "8080";
+    public const TYPE = "php";
 
-    const URL = "localhost";
-    const PORT = "8080";
-    const TYPE = "php";
-
-    public function send(...$args) {
+    public function send(...$args)
+    {
         $this->curl($args);
     }
 
-    protected function curl($payload) {
+    protected function curl($payload)
+    {
         try {
             $ch = curl_init(self::URL . ':' . self::PORT);
 
@@ -25,7 +27,7 @@ class Pmd {
 
             $data = json_encode($data);
             curl_setopt($ch, CURLOPT_POSTFIELDS, $data);
-            curl_setopt($ch, CURLOPT_HTTPHEADER, array('Content-Type:application/json'));
+            curl_setopt($ch, CURLOPT_HTTPHEADER, ['Content-Type:application/json']);
             curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
             curl_exec($ch);
         } finally {

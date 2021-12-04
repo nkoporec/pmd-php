@@ -2,8 +2,8 @@
 
 namespace nkoporec\Pmd\Tests;
 
-use PHPUnit\Framework\TestCase;
 use nkoporec\Pmd\Pmd;
+use PHPUnit\Framework\TestCase;
 
 class PmdTest extends TestCase
 {
