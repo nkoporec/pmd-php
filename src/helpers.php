@@ -8,5 +8,4 @@ if (! function_exists('pmd')) {
         $pmd = new Pmd();
         return $pmd->send(...$args);
     }
-
 }
