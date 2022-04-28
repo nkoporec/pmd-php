@@ -4,23 +4,22 @@ namespace nkoporec\Pmd;
 
 class Pmd {
 
-    const URL = "localhost";
-    const PORT = "8080";
-    const TYPE = "php";
-
     public function send(...$args) {
         $this->curl($args);
     }
 
     protected function curl($payload) {
+        $config = new Config();
+        $config = $config->getConfig();
+
         try {
-            $ch = curl_init(self::URL . ':' . self::PORT);
+            $ch = curl_init($config['url'] . ':' . $config['port'] . '/api/dump');
 
             $data = [
-                'payload' => $payload,
-            'file' => __FILE__,
-                'type' => self::TYPE,
-                'timestamp' => time(),
+                'payload' => json_encode($payload),
+                'file' => __FILE__,
+                'type' => $config['type'],
+                'timestamp' => (string) time(),
             ];
 
             $data = json_encode($data);

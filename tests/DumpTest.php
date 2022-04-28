@@ -19,7 +19,12 @@ class PmdTest extends TestCase
     /** @test */
     public function it_can_send_string()
     {
-        $this->pmd->send('test');
+        $a = [
+            "test",
+            "test2",
+            "test3",
+        ];
+        $this->pmd->send($a);
         $this->assertTrue(true);
     }
 }
