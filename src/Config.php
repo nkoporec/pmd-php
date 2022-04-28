@@ -2,8 +2,8 @@
 
 namespace nkoporec\Pmd;
 
-use Symfony\Component\Yaml\Yaml;
 use Composer\Autoload\ClassLoader;
+use Symfony\Component\Yaml\Yaml;
 
 class Config
 {
@@ -39,6 +39,7 @@ class Config
     {
         $reflection = new \ReflectionClass(ClassLoader::class);
         $vendorDir = dirname(dirname($reflection->getFileName()));
+
         return str_replace("/vendor", "", $vendorDir);
     }
 }
