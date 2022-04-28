@@ -8,24 +8,14 @@ class Pmd
     public const PORT = "8080";
     public const TYPE = "php";
 
-<<<<<<< HEAD
     public function send(...$args) {
-        $this->curl($args);
-    }
-
-    protected function curl($payload) {
-        $config = new Config();
-        $config = $config->getConfig();
-
-=======
-    public function send(...$args)
-    {
         $this->curl($args);
     }
 
     protected function curl($payload)
     {
->>>>>>> f106334892e4b8ed1c08458e20afed79cd476f21
+        $config = new Config();
+        $config = $config->getConfig();
         try {
             $ch = curl_init($config['url'] . ':' . $config['port'] . '/api/dump');
 
