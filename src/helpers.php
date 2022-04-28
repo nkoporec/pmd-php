@@ -16,6 +16,7 @@ if (! function_exists('pmd')) {
     function pmd(...$args): string
     {
         $pmd = new Pmd();
+
         return $pmd->send(...$args);
     }
 }

@@ -56,7 +56,7 @@ class Config
         $reflection = new \ReflectionClass(ClassLoader::class);
         $vendorDir = dirname(dirname($reflection->getFileName()));
 
-        if (!$vendorDir) {
+        if (! $vendorDir) {
             throw new \Exception("Could not find vendor dir");
         }
 
