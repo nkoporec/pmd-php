@@ -41,10 +41,12 @@ class Pmd
             // The first two calls are from the Pmd class.
             $backfiles = array_slice($backfiles, 2);
             $file = $backfiles[0]['file'];
+            $line = $backfiles[0]['line'];
 
             $data = [
                 'payload' => json_encode($payload),
                 'file' => $file,
+                'line' => (string) $line,
                 'type' => $config['type'],
                 'timestamp' => (string) time(),
             ];
