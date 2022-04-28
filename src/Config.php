@@ -4,15 +4,16 @@ namespace nkoporec\Pmd;
 
 use Symfony\Component\Yaml\Yaml;
 
-class Config {
+class Config
+{
+    public const CONFIG_FILE = "pmd.yaml";
 
-    const CONFIG_FILE = "pmd.yaml";
-
-    public function getConfig() {
+    public function getConfig()
+    {
         $dir = $this->getConfigDir();
         $file = $dir . DIRECTORY_SEPARATOR . self::CONFIG_FILE;
 
-        if (!file_exists($file)) {
+        if (! file_exists($file)) {
             return [
                 'url' => 'localhost',
                 'port' => '8080',
@@ -33,8 +34,8 @@ class Config {
         }
     }
 
-    public function getConfigDir() {
+    public function getConfigDir()
+    {
         return dirname(__FILE__);
     }
-
 }
