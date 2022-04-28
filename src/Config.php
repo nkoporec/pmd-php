@@ -3,6 +3,7 @@
 namespace nkoporec\Pmd;
 
 use Symfony\Component\Yaml\Yaml;
+use Composer\Autoload\ClassLoader;
 
 class Config
 {
@@ -27,7 +28,7 @@ class Config
             return [
                 'url' => $config['url'],
                 'port' => $config['port'],
-                'type' => $config['user'] ?: 'php',
+                'type' => $config['type'] ?: 'php',
             ];
         } catch (\Exception $e) {
             throw new \Exception("Error parsing config file: " . $file);
@@ -36,6 +37,8 @@ class Config
 
     public function getConfigDir()
     {
-        return dirname(__FILE__);
+        $reflection = new \ReflectionClass(ClassLoader::class);
+        $vendorDir = dirname(dirname($reflection->getFileName()));
+        return str_replace("/vendor", "", $vendorDir);
     }
 }
