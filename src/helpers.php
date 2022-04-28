@@ -5,7 +5,7 @@ use nkoporec\Pmd\Pmd;
 if (! function_exists('pmd')) {
 
     /**
-     * Helper function to create Pmd instance
+     * Poor's man debugger.
      *
      * @param mixed $args
      *   Args to send.

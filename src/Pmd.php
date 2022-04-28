@@ -8,7 +8,7 @@ namespace nkoporec\Pmd;
 class Pmd
 {
     /**
-     * Send the request to PMD.
+     * Poor's man debugger.
      *
      * @param mixed $args
      *   The payload to send.
