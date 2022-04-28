@@ -5,11 +5,22 @@ namespace nkoporec\Pmd;
 use Composer\Autoload\ClassLoader;
 use Symfony\Component\Yaml\Yaml;
 
+/**
+ * Config class.
+ */
 class Config
 {
+    /**
+     * The config file name.
+     */
     public const CONFIG_FILE = "pmd.yaml";
 
-    public function getConfig()
+    /**
+     * Get the config.
+     *
+     * @return array
+     */
+    public function getConfig(): array
     {
         $dir = $this->getConfigDir();
         $file = $dir . DIRECTORY_SEPARATOR . self::CONFIG_FILE;
@@ -35,10 +46,19 @@ class Config
         }
     }
 
-    public function getConfigDir()
+    /**
+     * Get the config directory, where the config file is located.
+     *
+     * @return string
+     */
+    public function getConfigDir(): string
     {
         $reflection = new \ReflectionClass(ClassLoader::class);
         $vendorDir = dirname(dirname($reflection->getFileName()));
+
+        if (!$vendorDir) {
+            throw new \Exception("Could not find vendor dir");
+        }
 
         return str_replace("/vendor", "", $vendorDir);
     }

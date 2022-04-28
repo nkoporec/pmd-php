@@ -2,14 +2,35 @@
 
 namespace nkoporec\Pmd;
 
+/**
+ * Class Pmd
+ */
 class Pmd
 {
-    public function send(...$args)
+    /**
+     * Send the request to PMD.
+     *
+     * @param mixed $args
+     *   The payload to send.
+     *
+     * @return string
+     *  The response from PMD.
+     */
+    public function send(...$args): string
     {
-        $this->curl($args);
+        return $this->curl($args);
     }
 
-    protected function curl($payload)
+    /**
+     * Helper function for curl.
+     *
+     * @param mixed $payload
+     *   The payload to send.
+     *
+     * @return string
+     *   Curl response code.
+     */
+    protected function curl($payload): string
     {
         $config = new Config();
         $config = $config->getConfig();
@@ -34,7 +55,10 @@ class Pmd
             curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
             curl_exec($ch);
         } finally {
+            $code = curl_getinfo($ch, CURLINFO_HTTP_CODE);
             curl_close($ch);
+
+            return (string) $code;
         }
     }
 }
