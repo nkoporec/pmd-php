@@ -8,7 +8,8 @@ class Pmd
     public const PORT = "8080";
     public const TYPE = "php";
 
-    public function send(...$args) {
+    public function send(...$args)
+    {
         $this->curl($args);
     }
 
@@ -16,6 +17,7 @@ class Pmd
     {
         $config = new Config();
         $config = $config->getConfig();
+
         try {
             $ch = curl_init($config['url'] . ':' . $config['port'] . '/api/dump');
 
