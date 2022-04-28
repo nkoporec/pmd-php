@@ -33,11 +33,16 @@ jobs:
           echo "::add-matcher::${{ runner.tool_cache }}/php.json"
           echo "::add-matcher::${{ runner.tool_cache }}/phpunit.json"
 
-      - name: Start PMD
-        run: |
-          go version
-          go install github.com/nkoporec/pmd@0.1
-          pmd listen
+      - name: Set up Go
+        uses: actions/setup-go@v2
+        with:
+          go-version: 1.18
+
+      - name: Install PMD
+        run: go install github.com/nkoporec/pmd@0.1
+
+      - name: Run PMD
+        run: pmd listen
 
       - name: Install dependencies
         run: composer update --${{ matrix.stability }} --prefer-dist --no-interaction
