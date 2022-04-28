@@ -17,6 +17,8 @@ class Pmd
         try {
             $ch = curl_init($config['url'] . ':' . $config['port'] . '/api/dump');
             $backfiles = debug_backtrace();
+            // The first two calls are from the Pmd class.
+            $backfiles = array_slice($backfiles, 2);
             $file = $backfiles[0]['file'];
 
             $data = [
