@@ -36,7 +36,7 @@ jobs:
       - name: Start PMD
         run: |
           go version
-          go get -u github.com/nkoporec/pmd
+          go install github.com/nkoporec/pmd@0.1
           pmd listen
 
       - name: Install dependencies
