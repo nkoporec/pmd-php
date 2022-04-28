@@ -27,18 +27,17 @@ jobs:
 
       - name: Setup PMD
         uses: actions/setup-go@v3
-        with:
-          go-version: '^1.13.1' # The Go version to download (if necessary) and use.
-        run: |
-          go version
-          go get -u github.com/nkoporec/pmd
-          pmd listen
-
 
       - name: Setup problem matchers
         run: |
           echo "::add-matcher::${{ runner.tool_cache }}/php.json"
           echo "::add-matcher::${{ runner.tool_cache }}/phpunit.json"
+
+      - name: Start PMD
+        run: |
+          go version
+          go get -u github.com/nkoporec/pmd
+          pmd listen
 
       - name: Install dependencies
         run: composer update --${{ matrix.stability }} --prefer-dist --no-interaction
