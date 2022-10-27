@@ -81,7 +81,6 @@ class PmdTest extends TestCase
         $this->assertEquals("200", $result);
     }
 
-
     /** @test */
     public function it_can_send_object()
     {
@@ -91,12 +90,12 @@ class PmdTest extends TestCase
     }
 }
 
-class TestObject {
-
+class TestObject
+{
     public $class = "class";
 
-
-    public function test() {
+    public function test()
+    {
         return "test";
     }
 }

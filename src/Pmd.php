@@ -69,7 +69,7 @@ class Pmd
                 'connector_type' => $config['type'],
                 'timestamp' => (string) time(),
             ];
-            
+
             $data = json_encode($data);
             curl_setopt($ch, CURLOPT_POSTFIELDS, $data);
             curl_setopt($ch, CURLOPT_HTTPHEADER, ['Content-Type:application/json']);

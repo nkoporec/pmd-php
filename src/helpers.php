@@ -3,7 +3,6 @@
 use nkoporec\Pmd\Pmd;
 
 if (! function_exists('pmd')) {
-
     /**
      * Poor's man debugger.
      *
