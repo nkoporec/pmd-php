@@ -50,6 +50,17 @@ class Pmd
             $file = $backfiles[0]['file'];
             $line = $backfiles[0]['line'];
 
+            $callstack = [];
+            // Send the full callstack.
+            foreach ($backfiles as $call) {
+                $stack = [
+                    "file" => $call['file'],
+                    "line" => (string) $call['line'],
+                    "function" => $call['function'] . '()',
+                ];
+                $callstack[] = "[" . $stack['line'] . "] " . $stack['file'] . "::" . $stack['function'];
+            }
+
             $data = [
                 'payload' => json_encode($payload),
                 'filepath' => (string) $file,

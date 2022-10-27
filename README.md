@@ -4,7 +4,7 @@ A PHP adapter for the PMD debugger.
 
 ## Requirements
 
-A working [PMD](https://github.com/nkoporec/pmd) client.
+A working [PMD](https://github.com/nkoporec/pmd) server.
 
 ## Installation
 
