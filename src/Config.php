@@ -28,7 +28,7 @@ class Config
         if (! file_exists($file)) {
             return [
                 'url' => 'localhost',
-                'port' => '8080',
+                'port' => '6969',
                 'type' => 'php',
             ];
         }

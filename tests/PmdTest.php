@@ -49,6 +49,7 @@ class PmdTest extends TestCase
         $array = [
             "string",
             "string2",
+            "string2",
         ];
         $result = $this->pmd->send($array);
 
@@ -78,5 +79,24 @@ class PmdTest extends TestCase
         $result = $this->pmd->send($class);
 
         $this->assertEquals("200", $result);
+    }
+
+
+    /** @test */
+    public function it_can_send_object()
+    {
+        $class = new TestObject();
+        $result = $this->pmd->send($class);
+        $this->assertEquals("200", $result);
+    }
+}
+
+class TestObject {
+
+    public $class = "class";
+
+
+    public function test() {
+        return "test";
     }
 }

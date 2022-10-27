@@ -35,22 +35,30 @@ class Pmd
         $config = new Config();
         $config = $config->getConfig();
 
+
         try {
             $ch = curl_init($config['url'] . ':' . $config['port'] . '/api/dump');
             $backfiles = debug_backtrace();
             // The first two calls are from the Pmd class.
             $backfiles = array_slice($backfiles, 2);
+
+            $callstack = [];
+            foreach ($backfiles as $item) {
+                $callstack[] = "[" . $item['line'] . "] " . $item['file'];
+            }
+
             $file = $backfiles[0]['file'];
             $line = $backfiles[0]['line'];
 
             $data = [
                 'payload' => json_encode($payload),
-                'file' => $file,
+                'filepath' => (string) $file,
+                'callstack' => (array) $callstack,
                 'line' => (string) $line,
-                'type' => $config['type'],
+                'connector_type' => $config['type'],
                 'timestamp' => (string) time(),
             ];
-
+            
             $data = json_encode($data);
             curl_setopt($ch, CURLOPT_POSTFIELDS, $data);
             curl_setopt($ch, CURLOPT_HTTPHEADER, ['Content-Type:application/json']);
