@@ -35,7 +35,6 @@ class Pmd
         $config = new Config();
         $config = $config->getConfig();
 
-
         try {
             $ch = curl_init($config['url'] . ':' . $config['port'] . '/dump');
             $backfiles = debug_backtrace();
@@ -46,17 +45,12 @@ class Pmd
             $line = $backfiles[0]['line'];
 
             $callstack = [];
+
             // Send the full callstack.
             foreach ($backfiles as $call) {
-                $stack = [
-                    "file" => $call['file'],
-                    "line" => (string) $call['line'],
-                    "function" => $call['function'] . '()',
-                ];
-
                 $callstack[] = [
-                    'filepath' => $stack['file'] . "::" . $stack['function'],
-                    'line' => $stack['line'],
+                    'filepath' => $call['file'] . "::" . $call['function'] . '()',
+                    'line' => $call['line'],
                 ];
             }
 
