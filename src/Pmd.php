@@ -42,11 +42,6 @@ class Pmd
             // The first two calls are from the Pmd class.
             $backfiles = array_slice($backfiles, 2);
 
-            $callstack = [];
-            foreach ($backfiles as $item) {
-                $callstack[] = "[" . $item['line'] . "] " . $item['file'];
-            }
-
             $file = $backfiles[0]['file'];
             $line = $backfiles[0]['line'];
 
@@ -58,7 +53,11 @@ class Pmd
                     "line" => (string) $call['line'],
                     "function" => $call['function'] . '()',
                 ];
-                $callstack[] = "[" . $stack['line'] . "] " . $stack['file'] . "::" . $stack['function'];
+
+                $callstack[] = [
+                    'filepath' => $stack['file'] . "::" . $stack['function'],
+                    'line' => $stack['line'],
+                ];
             }
 
             $data = [
