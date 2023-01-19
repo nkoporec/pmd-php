@@ -62,8 +62,8 @@ class Pmd
 
             $data = [
                 'payload' => json_encode($payload),
-                'filepath' => (string) $file,
-                'callstack' => (array) $callstack,
+                'filepath' => $file,
+                'callstack' => $callstack,
                 'line' => (string) $line,
                 'connector_type' => $config['type'],
                 'timestamp' => (string) time(),
