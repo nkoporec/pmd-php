@@ -35,6 +35,7 @@ class Pmd
         $config = new Config();
         $config = $config->getConfig();
 
+
         try {
             $ch = curl_init($config['url'] . ':' . $config['port'] . '/dump');
             $backfiles = debug_backtrace();
@@ -55,7 +56,7 @@ class Pmd
             }
 
             $data = [
-                'payload' => json_encode($payload),
+                'payload' => json_encode($payload, JSON_FORCE_OBJECT),
                 'filepath' => (string) $file,
                 'callstack' => (array) $callstack,
                 'line' => (string) $line,
