@@ -16,11 +16,11 @@ composer require nkoporec/pmd-php
 
 ## Configuration
 
-By default it will try to connect to 127.0.0.1:8080, if the PMD debugger is running on different port, then you can create a `pmd.yaml` file in the project root directory and it should look something like this (this is an example of how to set it up if you use docker containers)
+By default it will try to connect to 127.0.0.1:6969, if the PMD debugger is running on different port, then you can create a `pmd.yaml` file in the project root directory and it should look something like this (this is an example of how to set it up if you use docker containers)
 
 ```yaml
 url: "host.docker.internal"
-port: "8080"
+port: "6969"
 ```
 
 
