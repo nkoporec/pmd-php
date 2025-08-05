@@ -71,7 +71,7 @@ class PmdTest extends TestCase
     }
 
     /** @test */
-    public function it_can_send_class()
+    public function it_can_send_std_class()
     {
         $class = new \stdClass();
         $class->class = "class";
@@ -82,14 +82,25 @@ class PmdTest extends TestCase
     }
 
     /** @test */
-    public function it_can_send_object()
+    public function it_can_send_basic_object()
     {
         $class = new TestObject();
         $result = $this->pmd->send($class);
+
+        $this->assertEquals("200", $result);
+    }
+
+    /** @test */
+    public function it_can_send_custom_drupal_style_class()
+    {
+        $object = new SimulatedDrupalService();
+        $result = $this->pmd->send($object);
+
         $this->assertEquals("200", $result);
     }
 }
 
+// A simple object for basic structure testing
 class TestObject
 {
     public $class = "class";
@@ -97,5 +108,38 @@ class TestObject
     public function test()
     {
         return "test";
+    }
+}
+
+// A simulated "Drupal-style" service-like object
+class SimulatedDrupalService
+{
+    public string $id = 'my_service_id';
+
+    protected array $config = [
+        'cache' => true,
+        'mode' => 'prod',
+    ];
+
+    private string $secret = 'this_should_not_be_visible';
+
+    public function getId(): string
+    {
+        return $this->id;
+    }
+
+    public function getConfig(): array
+    {
+        return $this->config;
+    }
+
+    protected function internalLogic(): string
+    {
+        return 'internal';
+    }
+
+    private function verySecretLogic(): string
+    {
+        return 'shhh';
     }
 }
