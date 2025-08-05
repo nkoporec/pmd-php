@@ -17,10 +17,10 @@ class Pmd
         $namedPayload = [];
 
         foreach ($args as $i => $arg) {
-            $varName = '$var' . $i; // fallback name
+            $varName = '$var' . $i;
             $namedPayload[$varName] = [
                 'type' => $this->typeOf($arg),
-                'value' => $this->normalize($arg)
+                'value' => $this->normalize($arg),
             ];
         }
 
@@ -38,7 +38,7 @@ class Pmd
         $config = (new Config())->getConfig();
 
         try {
-            $ch = curl_init($config['url'] . ':' . $config['port'] . '/dump');
+            $ch = curl_init($config['url'] . '/dump');
 
             $backtrace = array_slice(debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS), 2);
             $file = $backtrace[0]['file'] ?? 'unknown';
@@ -51,9 +51,8 @@ class Pmd
                 ];
             }, $backtrace);
 
-            // No double-encoding!
             $data = [
-                'payload' => $payload, // raw array
+                'payload' => $payload,
                 'filepath' => (string) $file,
                 'callstack' => $callstack,
                 'line' => (string) $line,
@@ -61,47 +60,71 @@ class Pmd
                 'timestamp' => (string) time(),
             ];
 
-            curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($data, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES));
+            $json = json_encode($data, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
+
+            curl_setopt($ch, CURLOPT_POSTFIELDS, $json);
             curl_setopt($ch, CURLOPT_HTTPHEADER, ['Content-Type: application/json']);
             curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-            curl_exec($ch);
-        } finally {
-            $code = curl_getinfo($ch, CURLINFO_HTTP_CODE);
-            curl_close($ch);
 
-            return (string) $code;
+            $response = curl_exec($ch);
+            $httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+        } finally {
+            curl_close($ch);
         }
+
+        return '200';
     }
 
     /**
-     * Normalize a PHP variable to a JSON-safe structure.
-     *
-     * @param mixed $data
-     * @param int $depth
-     * @return mixed
+     * Normalize any PHP value to a JSON-safe structure with UTF-8 encoding.
      */
-    protected function normalize($data, int $depth = 0)
+    protected function normalize($data, int $depth = 0, array &$seen = [])
     {
-        if ($depth > 20) {
+        if ($depth > 10) {
             return '[Max depth reached]';
         }
 
         if (is_scalar($data) || $data === null) {
-            return $data;
+            return is_string($data)
+                ? mb_convert_encoding($data, 'UTF-8', 'UTF-8')
+                : $data;
+        }
+
+        if (is_resource($data)) {
+            return '[resource]';
+        }
+
+        if (is_callable($data)) {
+            return '[callable]';
         }
 
         if (is_array($data)) {
-            return array_map(fn($item) => $this->normalize($item, $depth + 1), $data);
+            $normalized = [];
+            foreach ($data as $key => $value) {
+                $safeKey = is_string($key)
+                    ? mb_convert_encoding($key, 'UTF-8', 'UTF-8')
+                    : $key;
+
+                $normalized[$safeKey] = $this->normalize($value, $depth + 1, $seen);
+            }
+            return $normalized;
         }
 
         if (is_object($data)) {
+            $objectId = spl_object_id($data);
+            if (isset($seen[$objectId])) {
+                return '[circular reference]';
+            }
+            $seen[$objectId] = true;
+
             $result = ['__class' => get_class($data)];
             $reflection = new ReflectionClass($data);
 
             foreach ($reflection->getProperties() as $property) {
                 $property->setAccessible(true);
                 try {
-                    $result[$property->getName()] = $this->normalize($property->getValue($data), $depth + 1);
+                    $value = $property->getValue($data);
+                    $result[$property->getName()] = $this->normalize($value, $depth + 1, $seen);
                 } catch (\Throwable $e) {
                     $result[$property->getName()] = '[unreadable]';
                 }
@@ -114,41 +137,38 @@ class Pmd
     }
 
     /**
-     * Get simplified type of a value for debug metadata.
-     *
-     * @param mixed $value
-     * @return string
+     * Check for invalid UTF-8 in a deeply nested structure and return the path.
+     */
+    protected function findInvalidUtf8($data, string $path = ''): ?string
+    {
+        if (is_array($data)) {
+            foreach ($data as $key => $value) {
+                $newPath = $path . "[$key]";
+                $found = $this->findInvalidUtf8($value, $newPath);
+                if ($found !== null) {
+                    return $found;
+                }
+            }
+        } elseif (is_string($data) && !mb_check_encoding($data, 'UTF-8')) {
+            return "Invalid UTF-8 at path: $path";
+        }
+        return null;
+    }
+
+    /**
+     * Get the simplified type name for the payload.
      */
     protected function typeOf($value): string
     {
-        if (is_object($value)) {
-            return 'Object';
-        }
-
-        if (is_array($value)) {
-            return 'Array';
-        }
-
-        if (is_string($value)) {
-            return 'String';
-        }
-
-        if (is_int($value)) {
-            return 'Integer';
-        }
-
-        if (is_float($value)) {
-            return 'Float';
-        }
-
-        if (is_bool($value)) {
-            return 'Boolean';
-        }
-
-        if (is_null($value)) {
-            return 'Null';
-        }
-
-        return 'Unknown';
+        return match (true) {
+            is_object($value) => 'Object',
+            is_array($value) => 'Array',
+            is_string($value) => 'String',
+            is_int($value) => 'Integer',
+            is_float($value) => 'Float',
+            is_bool($value) => 'Boolean',
+            is_null($value) => 'Null',
+            default => 'Unknown',
+        };
     }
 }
