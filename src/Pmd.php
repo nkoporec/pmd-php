@@ -20,7 +20,7 @@ class Pmd
             $varName = '$var' . $i; // fallback name
             $namedPayload[$varName] = [
                 'type' => $this->typeOf($arg),
-                'value' => $this->normalize($arg)
+                'value' => $this->normalize($arg),
             ];
         }
 
@@ -91,7 +91,7 @@ class Pmd
         }
 
         if (is_array($data)) {
-            return array_map(fn($item) => $this->normalize($item, $depth + 1), $data);
+            return array_map(fn ($item) => $this->normalize($item, $depth + 1), $data);
         }
 
         if (is_object($data)) {
@@ -100,6 +100,7 @@ class Pmd
 
             foreach ($reflection->getProperties() as $property) {
                 $property->setAccessible(true);
+
                 try {
                     $result[$property->getName()] = $this->normalize($property->getValue($data), $depth + 1);
                 } catch (\Throwable $e) {
