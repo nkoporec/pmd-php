@@ -107,6 +107,7 @@ class Pmd
 
                 $normalized[$safeKey] = $this->normalize($value, $depth + 1, $seen);
             }
+
             return $normalized;
         }
 
@@ -122,6 +123,7 @@ class Pmd
 
             foreach ($reflection->getProperties() as $property) {
                 $property->setAccessible(true);
+
                 try {
                     $value = $property->getValue($data);
                     $result[$property->getName()] = $this->normalize($value, $depth + 1, $seen);
@@ -149,9 +151,10 @@ class Pmd
                     return $found;
                 }
             }
-        } elseif (is_string($data) && !mb_check_encoding($data, 'UTF-8')) {
+        } elseif (is_string($data) && ! mb_check_encoding($data, 'UTF-8')) {
             return "Invalid UTF-8 at path: $path";
         }
+
         return null;
     }
 
